@@ -1,0 +1,53 @@
+//@HLQ@D JOB (@ACCT@),'MIG DB2 DDL',CLASS=@CLASS@,MSGCLASS=@MSGCLASS@,
+//         NOTIFY=&SYSUID
+//*-------------------------------------------------------------------
+//* DB2DDL - run ONCE. Creates the 3 tables in YOUR OWN schema.
+//* Table names are unqualified, so DB2 uses your own authorization id.
+//* No BIND and no embedded SQL are used anywhere in this project;
+//* DB2 is only used through DSNTEP2 (dynamic SQL).
+//*-------------------------------------------------------------------
+//DDL      EXEC PGM=IKJEFT01,DYNAMNBR=20
+//STEPLIB  DD DISP=SHR,DSN=@DB2LOAD@
+//SYSTSPRT DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SYSUDUMP DD SYSOUT=*
+//SYSTSIN  DD *
+  DSN SYSTEM(@DB2SSID@)
+  RUN PROGRAM(DSNTEP2) PLAN(@DB2PLAN@) LIB('@DB2RUN@')
+  END
+/*
+//SYSIN    DD *
+CREATE TABLE CUSTOMER_NEW
+ (CUST_ID   CHAR(8)      NOT NULL,
+  ACCT_NO   CHAR(10)     NOT NULL,
+  CUST_NAME VARCHAR(40)  NOT NULL,
+  BALANCE   DECIMAL(11,2) NOT NULL,
+  TXN_DATE  DATE         NOT NULL,
+  STATUS    CHAR(1)      NOT NULL);
+CREATE UNIQUE INDEX CUSTNEW_UX
+ ON CUSTOMER_NEW (CUST_ID, ACCT_NO);
+CREATE TABLE MIG_BATCH_LOG
+ (BATCH_ID    CHAR(15)     NOT NULL,
+  RUN_TS      TIMESTAMP    NOT NULL WITH DEFAULT,
+  SRC_RAW     INTEGER      NOT NULL,
+  DUPS        INTEGER      NOT NULL,
+  SRC_UNIQUE  INTEGER      NOT NULL,
+  TGT_CNT     INTEGER      NOT NULL,
+  MATCHED     INTEGER      NOT NULL,
+  MISMATCH    INTEGER      NOT NULL,
+  MISSING     INTEGER      NOT NULL,
+  EXTRA       INTEGER      NOT NULL,
+  RC          SMALLINT     NOT NULL,
+  DECISION    VARCHAR(10)  NOT NULL,
+  SRC_BAL_TOT DECIMAL(15,2) NOT NULL,
+  TGT_BAL_TOT DECIMAL(15,2) NOT NULL);
+CREATE TABLE MIG_EXCEPTION
+ (BATCH_ID   CHAR(15)     NOT NULL,
+  CUST_ID    CHAR(8)      NOT NULL,
+  ACCT_NO    CHAR(10)     NOT NULL,
+  ERR_TYPE   VARCHAR(8)   NOT NULL,
+  FIELD_NAME VARCHAR(8)   NOT NULL,
+  SRC_VAL    VARCHAR(30)  NOT NULL,
+  TGT_VAL    VARCHAR(30)  NOT NULL);
+COMMIT;
+/*

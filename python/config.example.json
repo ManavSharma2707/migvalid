@@ -1,0 +1,14 @@
+{
+  "hlq": "ZZZZZ99",
+  "zosmf_profile": "",
+  "acct": "1",
+  "job_class": "A",
+  "msgclass": "H",
+  "unit": "SYSDA",
+  "db2_ssid": "DBCG",
+  "db2_loadlib": "DSNC10.SDSNLOAD",
+  "db2_runlib": "DSNC10.RUNLIB.LOAD",
+  "db2_plan": "DSNTEP12",
+  "cobol_proc": "IGYWCL",
+  "cobol_lngprfx": ""
+}
